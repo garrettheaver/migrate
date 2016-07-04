@@ -6,13 +6,13 @@ module Migrate
     end
 
     def ensure(scripts)
-      existing = _versions.select(:filename).map{ |v| v[:filename] }
+      existing = _versions.select(:migration).map{ |v| v[:migration] }
       required = scripts.select{ |s| !existing.include?(s) }
 
       @db.transaction do
         required.each do |m|
           @db << File.read(m)
-          _versions.insert({ filename: m })
+          _versions.insert({ migration: m })
         end
       end
 
