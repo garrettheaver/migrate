@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'migrate'
-  s.version = '0.1.0'
+  s.version = '0.1.1'
   s.licenses = ['MIT']
   s.summary = 'Basic SQL only migration tool'
   s.description = 'A basic tool for managing SQL database migrations'
