@@ -1,0 +1,18 @@
+#! /usr/bin/env ruby
+
+require 'sequel'
+require_relative '../lib/migrate/migrator'
+
+# ensure we have acceptable params
+usage = "usage: migrate <database> <scripts...>"
+abort usage unless ARGV.length >= 2
+
+# connect to the database
+db = Sequel.connect(ARGV.shift)
+migrator = Migrate::Migrator.new(db)
+
+# apply the scripts
+migrator.apply(ARGV) do |a|
+  puts "applied #{a}"
+end
+

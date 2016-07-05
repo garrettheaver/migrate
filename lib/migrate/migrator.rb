@@ -6,7 +6,7 @@ module Migrate
     end
 
     # apply any missing migrations
-    def ensure(scripts)
+    def apply(scripts)
       existing = _versions.select(:migration).map{ |v| v[:migration] }
       required = scripts.select{ |s| !existing.include?(File.basename(s)) }
 
@@ -16,11 +16,14 @@ module Migrate
       # migrations have already been executed.
 
       @db.transaction do
-        required.each do |m|
-          @db << File.read(m)
+        required.each do |path|
+          @db << File.read(path)
+
           _versions.insert({
-            migration: File.basename(m)
+            migration: File.basename(path)
           })
+
+          yield path
         end
       end
 
