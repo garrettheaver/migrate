@@ -11,3 +11,6 @@ CREATE TABLE _versions
   migration text NOT NULL
 );
 
+CREATE UNIQUE INDEX _ux_versions_migration
+ON _versions (migration);
+
