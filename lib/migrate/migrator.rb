@@ -17,10 +17,7 @@ module Migrate
       @db.transaction do
         required.map do |path|
 
-          # check the path actually exists before we try to use it
-          raise ArgumentError, "#{path} not found" unless File.exists?(path)
-
-          _execute(path)
+          execute(path)
           _versions.insert({
             migration: File.basename(path)
           })
@@ -32,6 +29,28 @@ module Migrate
 
       required
     end
+
+    # Two types of migrations are currently supported. Simple SQL files and
+    # executable files of any kind. SQL files are simply executed against the
+    # db. Executable files are called with the first argument the db connection
+    # uri. If the caller has given us a migration to perform but we have no
+    # idea how to execute it the safest thing to do is throw an error and let
+    # the entire operation rollback.
+
+    def execute(path)
+      @db.transaction do
+        if false == File.exists?(path)
+          raise ArgumentError, "#{path} not found"
+        elsif '.sql' == File.extname(path)
+          @db << File.read(path)
+        elsif File.executable?(path)
+          %x(#{path} #{@db.uri})
+        else
+          raise ArgumentError, "#{path} not valid"
+        end
+      end
+    end
+
 
     private
 
@@ -51,27 +70,6 @@ module Migrate
       @db.transaction do
         filename = "../versions.#{@db.adapter_scheme}.sql"
         @db << File.read(File.expand_path(filename, __FILE__))
-      end
-    end
-
-    # Two types of migrations are currently supported. Simple SQL files
-    # and executable files of any kind. SQL files are simply executed
-    # against the db. Executable files are called with the first argument
-    # the db connection uri.
-
-    def _execute(path)
-      if '.sql' == File.extname(path)
-        @db << File.read(path)
-      elsif File.executable?(path)
-        %x(#{path} #{@db.uri})
-      else
-
-        # If the caller has given us a migration to perform but we have
-        # no idea how to execute it the safest thing to do is throw an
-        # error and let the entire operation rollback.
-
-        raise ArgumentError, "#{path} is invalid"
-
       end
     end
 
