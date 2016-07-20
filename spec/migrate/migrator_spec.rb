@@ -17,7 +17,8 @@ describe Migrate::Migrator do
   describe '#execute' do
 
     it 'raises an error if the path does not exist' do
-      expect{ subject.execute('/no.file') }.to raise_error(ArgumentError)
+      expect{ subject.execute('/no.file') }.
+        to raise_error(ArgumentError)
     end
 
     it 'reads and runs .sql file contents against the db' do
@@ -34,9 +35,10 @@ describe Migrate::Migrator do
       Tempfile.create(['test', '.sh']) do |file|
         file.write('printf $1')
         file.chmod(0777)
-
         file.close
-        expect(subject.execute(file.path)).to eq(db.uri)
+
+        expect(subject.execute(file.path)).
+          to eq(db.uri)
       end
     end
 
@@ -44,15 +46,17 @@ describe Migrate::Migrator do
       Tempfile.create(['test', '.sh']) do |file|
         file.write('exit 1')
         file.chmod(0777)
-
         file.close
-        expect{ subject.execute(file.path) }.to raise_error(RuntimeError)
+
+        expect{ subject.execute(file.path) }.
+          to raise_error(RuntimeError)
       end
     end
 
     it 'raises an error on invalid files' do
       Tempfile.create(['test', '.unknown']) do |file|
-        expect{ subject.execute(file.path) }.to raise_error(ArgumentError)
+        expect{ subject.execute(file.path) }.
+          to raise_error(ArgumentError)
       end
     end
 
