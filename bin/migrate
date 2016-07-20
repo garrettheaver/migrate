@@ -1,25 +1,30 @@
 #! /usr/bin/env ruby
 
 require 'sequel'
+
 require_relative '../lib/migrate'
+puts "migrate: version #{Migrate::VERSION}"
 
 # ensure we have acceptable params
 unless ARGV.length >= 2
-  abort <<-EOF
-migrate version: #{Migrate::VERSION}
-usage: migrate <database> <scripts...>
-  EOF
+  abort "usage: migrate <database> <scripts...>"
 end
 
 # connect to the database
 db = Sequel.connect(ARGV.shift)
-migrator = Migrate::Migrator.new(db)
+puts "connect: #{db.uri}"
 
 begin
+
   # apply the scripts
-  migrator.apply(ARGV) do |a|
+  migrator = Migrate::Migrator.new(db)
+  applied = migrator.apply(ARGV) do |a|
     puts "applied: #{a}"
   end
+
+  # let user know we at least checked
+  puts "applied: nothing, already up to date" if applied.empty?
+
 rescue Exception => ex
   abort "ABORTED: #{ex.message}"
 end
