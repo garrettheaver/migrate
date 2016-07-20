@@ -20,7 +20,7 @@ begin
   migrator.apply(ARGV) do |a|
     puts "applied: #{a}"
   end
-rescue ArgumentError => ex
+rescue Exception => ex
   abort "ABORTED: #{ex.message}"
 end
 

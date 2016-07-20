@@ -44,7 +44,11 @@ module Migrate
         elsif '.sql' == File.extname(path)
           @db << File.read(path)
         elsif File.executable?(path)
-          %x(#{path} #{@db.uri})
+          %x(#{path} #{@db.uri}).tap do |out|
+            unless 0 == $?.exitstatus
+              raise RuntimeError, "#{path} failed: #{out}"
+            end
+          end
         else
           raise ArgumentError, "#{path} not valid"
         end

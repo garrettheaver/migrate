@@ -39,6 +39,16 @@ describe Migrate::Migrator do
       end
     end
 
+    it 'raises an error when a +x file has a non zero exit code' do
+      Tempfile.create(['test', '.sh']) do |file|
+        file.write('exit 1')
+        file.chmod(0777)
+
+        file.close
+        expect{ subject.execute(file.path) }.to raise_error(RuntimeError)
+      end
+    end
+
     it 'raises an error on invalid files' do
       Tempfile.create(['test', '.unknown']) do |file|
         expect{ subject.execute(file.path) }.to raise_error(ArgumentError)
