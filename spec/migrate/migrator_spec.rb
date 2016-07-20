@@ -1,3 +1,4 @@
+require 'tempfile'
 require_relative '../../lib/migrate'
 
 describe Migrate::Migrator do
