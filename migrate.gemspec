@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.name = 'migrate'
   s.version = Migrate::VERSION
   s.licenses = ['MIT']
-  s.summary = 'Basic SQL only migration tool'
-  s.description = 'A basic tool for managing SQL database migrations'
+  s.summary = 'Basic database migration tool'
+  s.description = 'A basic tool for managing database migrations'
   s.authors = ['Garrett Heaver']
   s.files = Dir['{lib, bin}/**/*'] + %w(LICENSE)
   s.executables << 'migrate'

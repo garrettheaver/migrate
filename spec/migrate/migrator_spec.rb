@@ -29,7 +29,7 @@ describe Migrate::Migrator do
       end
     end
 
-    it 'runs executable files with the db uri as the first argument' do
+    it 'runs +x files passing the db uri as the first argument' do
       Tempfile.create(['test', '.sh']) do |file|
         file.write('printf $1')
         file.chmod(0777)
