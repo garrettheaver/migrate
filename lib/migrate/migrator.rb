@@ -1,3 +1,5 @@
+require_relative './errors'
+
 module Migrate
   class Migrator
 
@@ -40,17 +42,17 @@ module Migrate
     def execute(path)
       @db.transaction do
         if false == File.exists?(path)
-          raise ArgumentError, "#{path} not found"
+          raise MigrateError, "#{path} not found"
         elsif '.sql' == File.extname(path)
           @db << File.read(path)
         elsif File.executable?(path)
           %x(#{path} #{@db.uri}).tap do |out|
             unless 0 == $?.exitstatus
-              raise RuntimeError, "#{path} failed: #{out}"
+              raise MigrateError, "#{path} failed: #{out}"
             end
           end
         else
-          raise ArgumentError, "#{path} not valid"
+          raise MigrateError, "#{path} not valid"
         end
       end
     end

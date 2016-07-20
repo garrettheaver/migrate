@@ -1,7 +1,6 @@
 #! /usr/bin/env ruby
 
 require 'sequel'
-
 require_relative '../lib/migrate'
 puts "migrate: version #{Migrate::VERSION}"
 
