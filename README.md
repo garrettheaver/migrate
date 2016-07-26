@@ -30,3 +30,6 @@ Currently the following databases are supported by the tool. Pull requests to su
 
 * PostgreSQL (`postgres://<user>:<pass>@<host>/<database>`)
 
+## Limitations
+Since executable migrations (`chmod +x` files) must establish their own database connection, any changes they make cannot be rolled back as part of the transaction within the calling `migrate` command. It is therefore essential that any changes made by those scripts be contained within their own transaction which is rolled back should an error occur.
+
