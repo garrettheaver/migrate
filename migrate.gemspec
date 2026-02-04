@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.executables << 'migrate'
   s.require_paths = ['lib']
   s.homepage = 'https://github.com/garrettheaver/migrate'
-  s.add_dependency 'sequel', '~> 4.36', '>= 4.36.0'
-  s.add_development_dependency 'rspec', '~> 3.5', '>= 3.5.0'
+  s.add_dependency 'sequel', '~> 5.101', '>= 5.101.0'
+  s.add_development_dependency 'rspec', '~> 3.13'
 end
 
