@@ -39,7 +39,7 @@ module Migrate
 
     def execute(path)
       @db.transaction do
-        if false == File.exists?(path)
+        if false == File.exist?(path)
           raise MigrateError, "#{path} not found"
         elsif '.sql' == File.extname(path)
           @db << File.read(path)
