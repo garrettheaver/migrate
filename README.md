@@ -1,8 +1,6 @@
 # Migrate
 A basic ruby tool for managing database migrations.
 
-[![Build Status](https://travis-ci.org/garrettheaver/migrate.svg?branch=master)](https://travis-ci.org/garrettheaver/migrate)
-
 Two different types of migration are supported:
 
 1. Simple SQL files
